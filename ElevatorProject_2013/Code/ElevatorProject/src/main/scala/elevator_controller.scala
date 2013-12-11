@@ -1,45 +1,6 @@
 import scala.actors.Actor
 import scala.actors.Actor._
 
-class elevator_queue(number_of_floors:Int) {
-  //hold our floor records in an array of arrays
-
-  // ***** Make This Private *****
-  var e_queue = new Array[Array[Boolean]](number_of_floors + 1)
-  // ****************************
-private var upDown = new Array[Boolean](2)
-  for (index <- 0 until e_queue.length) {
-    // each floor record in our queue holds two values
-    // i1 - up request
-    // i0 - down request
-    e_queue(index) = upDown
-  }
-
-  def floor_request_set(floor_num:Int, direction:Boolean) = {
-    // first convert the direction bool to an index
-    val direction_index:Int = convert_direction(direction)
-    // then set the queue
-    e_queue(floor_num)(direction_index) = true
-  }
-
-  def floor_request_clear(floor_num:Int, direction:Boolean) = {
-    // first convert the direction bool to an index
-    val direction_index:Int = convert_direction(direction)
-    // then set the queue
-    e_queue(floor_num)(direction_index) = false
-  }
-
-  // converts the up/down bool to an index
-  private def convert_direction(direction_bool:Boolean):Int = {
-    direction_bool match {
-      // if true, we're going up
-      case true => return 1
-      // if false, we're going down
-      case false => return 0
-    }
-  }
-}
-
 class elevator_controller(top_floor:Int) extends Actor {
   // the elevator controller knows:
   // how tall the building is
@@ -55,6 +16,7 @@ class elevator_controller(top_floor:Int) extends Actor {
   var location:Int = 1
   var direction:Boolean = false
   val e_queue = new elevator_queue(top_floor)
+  var theElevator = new Elevator
 
   // list requests the controller will respond to:
   case class floor_request(floor:Int)
@@ -122,9 +84,9 @@ class elevator_controller(top_floor:Int) extends Actor {
       
       currentFloor match
       {
-          case 1 =>         guiGlobals.door1.open()
-          case 2 =>         guiGlobals.door2.open()
-          case 3 =>         guiGlobals.door3.open()
+          case 1 =>         SystemStatus.door1Open = true
+          case 2 =>         SystemStatus.door2Open = true
+          case 3 =>         SystemStatus.door3Open = true
       }
   }
    def alarm_On()
