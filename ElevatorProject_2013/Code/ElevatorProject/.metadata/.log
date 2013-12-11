@@ -1,0 +1,27 @@
+!SESSION 2013-12-07 14:39:24.811 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.6.0_65
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.standard.product -keyring /Users/scottalzheimer/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.standard.product -keyring /Users/scottalzheimer/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2013-12-07 14:40:20.542
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.mylyn.tasks.ui 2 0 2013-12-07 14:40:32.832
+!MESSAGE No search provider was registed. Tasks search is not available.
+
+!ENTRY org.eclipse.wst.common.project.facet.core 4 0 2013-12-07 14:40:35.160
+!MESSAGE Project facet jst.web has not been defined. It is used in plugin org.eclipse.jst.j2ee.
+
+!ENTRY org.springsource.ide.eclipse.commons.frameworks.core 0 0 2013-12-07 14:40:40.144
+!MESSAGE Result of converting legacy STS 2.x workspace preferences to 3.x
+!SUBENTRY 1 org.springsource.ide.eclipse.commons.frameworks.core 0 0 2013-12-07 14:40:40.144
+!MESSAGE Converted legacy STS plugin preferences
+!SUBENTRY 1 unknown 0 0 2013-12-07 14:40:40.144
+!MESSAGE OK
+!SUBENTRY 1 org.springsource.ide.eclipse.commons.frameworks.core 0 0 2013-12-07 14:40:40.144
+!MESSAGE Converted legacy Roo plugin state locations
+!SUBENTRY 1 org.springsource.ide.eclipse.commons.frameworks.core 0 0 2013-12-07 14:40:40.144
+!MESSAGE Converted legacy STS plugin state locations
