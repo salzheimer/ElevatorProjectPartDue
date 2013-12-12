@@ -9,4 +9,6 @@
 [0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\.ivy2\cache\joda-time\joda-time\jars\joda-time-1.6.2.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
 [0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread Thread-1 to exit[0m
+[0m[[0mdebug[0m] [0mWaiting for thread AWT-EventQueue-0 to exit[0m
+[0m[[0mdebug[0m] [0m	Thread AWT-EventQueue-0 exited.[0m
+[0m[[0mdebug[0m] [0mWaiting for thread Thread-3 to exit[0m

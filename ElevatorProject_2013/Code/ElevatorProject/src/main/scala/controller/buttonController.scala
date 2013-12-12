@@ -18,7 +18,6 @@ class buttonController
   var alarmOff = new Button1("alarm off")
   var onePassenger = new Passenger()
   onePassenger.start()
-  var theElevator = new Elevator()
   var elevator_controller = new elevator_controller(3)
   val elevatorController = new elevator_controller(3)
   elevatorController.start()
