@@ -1,17 +1,19 @@
 
 class Elevator {
 	var location: Int = 1
-	var direcion: Boolean = true
+	var direction: Boolean = true
 	var alarmMode: Boolean = false
 	var maintenenceMode: Boolean = false
 	var numPassengers: Int = 0
 	
-	def callElevator(button:modelDirectionButton) = {
-		button.upDown match {
+	def callElevator() = {
+		direction match {
 			case true =>
-				upRequests += button.currentFloor
+			//	upRequests += button.currentFloor
+			println("hi")
 			case false =>
-				downRequests += button.currentFloor
+		//		downRequests += button.currentFloor
+		println("hi")
 		}
 	}
 }

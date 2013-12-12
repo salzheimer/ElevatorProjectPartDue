@@ -92,7 +92,7 @@ class elevator_controller(top_floor:Int) extends Actor {
    def alarm_On()
   {
           //clear request 
-          e_queue.clear_All_Request()
+       //   e_queue.clear_All_Request()
           //check which floor is closest 
           // stop nearest floor
           val cableLength = Motor.lineOut()
@@ -151,16 +151,16 @@ class elevator_controller(top_floor:Int) extends Actor {
 
   def alarm_Off()
   {
-     moveToFloor1()
+   //  moveToFloor1()
   }
   def moveToFloorOne()
   {
       while(Motor.lineOut()!= 32)
        {
-           Motor.douwn()
+        //   Motor.douwn()
        }
        Motor.stop()
-       openDoor(1)        
+      // openDoor(1)        
   }
   def maintanence_Mode_On()
   {
@@ -168,7 +168,7 @@ class elevator_controller(top_floor:Int) extends Actor {
       //stop receiving requests
       //process current queue
       //move to floor 1
-      moveToFloor1()
+    //  moveToFloor1()
   }
   def maintanence_Mode_Off()
   {
