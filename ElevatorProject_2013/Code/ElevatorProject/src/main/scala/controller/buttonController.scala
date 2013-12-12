@@ -1,6 +1,5 @@
 import scala.actors.Actor
 import scala.actors.Actor._
-scala.collection.mutable.ArrayBuffer
 
 class buttonController 
  extends Actor {

@@ -16,7 +16,7 @@ class elevator_controller(top_floor:Int) extends Actor {
   var location:Int = 1
   var direction:Boolean = false
   val e_queue = new elevator_queue(top_floor)
-  var theElevator = new Elevator
+  var theElevator = new Elevator()
 
   // list requests the controller will respond to:
   case class floor_request(floor:Int)

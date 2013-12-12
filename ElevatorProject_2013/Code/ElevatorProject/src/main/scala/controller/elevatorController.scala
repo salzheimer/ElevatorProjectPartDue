@@ -1,6 +1,5 @@
 import scala.actors.Actor
 import scala.actors.Actor._
-import scala.collection.mutable.ArrayBuffer
 
 class elevatorController 
  extends Actor {
@@ -18,7 +17,7 @@ class elevatorController
   var door1 = new elevatorDoor(1)
   var door2 = new elevatorDoor(2)
   var door3 = new elevatorDoor(3)
-  var doorArray = new 
+ 
 	
 	def act
 	{
