@@ -5,15 +5,19 @@ class Elevator {
 	var alarmMode: Boolean = false
 	var maintenenceMode: Boolean = false
 	var numPassengers: Int = 0
+	var elevatorDoors = Array[elevatorDoor](new elevatorDoor(1), new elevatorDoor(2), new elevatorDoor(3))
 	
-	def callElevator() = {
+	def moveFloor() = {
 		direction match {
 			case true =>
 			//	upRequests += button.currentFloor
-			println("hi")
 			case false =>
 		//		downRequests += button.currentFloor
-		println("hi")
 		}
+	}
+
+	def openDoor(doorNum: Int)
+	{
+
 	}
 }

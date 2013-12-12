@@ -14,37 +14,81 @@ class elevator_controller(top_floor:Int) extends Actor {
 
 //val top_floor = top_floor
   var location:Int = 1
-  var direction:Boolean = false
+  var direction:Boolean = true
   val e_queue = new elevator_queue(top_floor)
-  var theElevator = new Elevator()
+  val door1 = new elevatorDoor(1)
+  val door2 = new elevatorDoor(2)
+  val door3 = new elevatorDoor(3)
+	var waitingForRequest:Boolean = false
+  // Give info from from motor.lineOut() better names:
+  // Returns the amount of feet of cable the motor has let out.
+  // 36 ft is floor 1
+  // 20 ft is floor 2
+  // 2 ft is floor 3
+  val floors_list:List[Int] = List(0, 36, 20, 2)
 
   // list requests the controller will respond to:
-  case class floor_request(floor:Int)
+  case class floor_request(floor:Int, sendingFloor:Int)
   case class floor_clear(floor:Int, direction:Boolean)
   case class alarm(switch:Boolean)
   case class maintenance(switch:Boolean)
+
+  // list internal requests the controller will call on itself:
+  private case class floor_move(floor_number:Int, direction:Boolean)
+  private case class doors_toggle(door:guiDoor, state:String)
 
   // our main action loop
   def act = {
     while (true) {
       receive {
-        case floor_request(floor) => start_floor_request(floor)
-        case floor_clear(floor, direction) => end_floor_request(floor,direction)
+        case floor_request(floor,sendingFloor:Int) => 
+    				//if there is an open door, and the floor the button was called from is open to the floor
+    				//this open door is on, we wish to close this elevator door
+         		if(checkDoorsOpen() && sendingFloor == returnOpenDoor()) controlCloseDoors(sendingFloor)
+        		start_floor_request(floor)
+        case floor_clear(floor, direction) => end_floor_request(floor, direction)
         case alarm(switch) => {
           if (switch) {
-            alarm_On()
+            println("fire alarm: on")
           } else {
-            alarm_Off()
+            println("fire alarm: off")
           }
         }
         case maintenance(switch) => {
           if (switch) {
-            maintanence_Mode_On()
+            println("maintence mode: on")
           } else {
-            maintanence_Mode_Off()
+            println("maintenace mode: off")
           }
         }
-        case _ => {println("Unknown Request")}
+        case floor_move(floor_number, direction) => {
+        	println(floors_list(floor_number))
+        	println(Motor.lineOut)
+          while(Motor.lineOut() != floors_list(floor_number)) {
+            if (direction) {
+              Motor.up()
+            } else {
+              Motor.down()
+            }
+          }
+          Motor.stop()
+          println("sending drop passenger")
+          drop_passenger(floor_number)
+        }
+        case doors_toggle(door, state) => {
+          println("recieved " + door + state)
+          state match {
+            case "open" => {
+              door.open()
+              println("from doors_toggle: doors open")
+            }
+            case "close" => {
+              door.close()
+              println("from doors_toggle: doors closed")
+            }
+          }
+        }
+        case _ => {println("unknown request")}
       }
     }
   }
@@ -54,22 +98,41 @@ class elevator_controller(top_floor:Int) extends Actor {
     if (current_floor < requested_floor) {r_val = Option(true)}
     if (current_floor > requested_floor) {r_val = Option(false)}
     if (current_floor == requested_floor){r_val = None}
-
     return r_val
   }
 
+	def checkDoorsOpen():Boolean = {
+			if (ControllerFactory.elevatorController.door1.isOpen || ControllerFactory.elevatorController.door2.isOpen
+			|| ControllerFactory.elevatorController.door3.isOpen) return true
+			return false
+		}
+		
+	def returnOpenDoor():Int = {
+			if (ControllerFactory.elevatorController.door1.isOpen){
+				return 1
+			}
+			else if(ControllerFactory.elevatorController.door2.isOpen){
+				return 2
+			}
+			else{
+				 return 3
+			}
+		}
+
   def start_floor_request(floor:Int) = {
-    require(floor <= top_floor)
+   // require(floor <= top_floor)
     // first determine which way we need to move
     var required_direction:Option[Boolean] = determine_direction(location, floor)
-
     required_direction match {
       case None => {
         // call "drop-off"
-        println("Same floor: call drop-off")
+        println("same floor: call drop-off")
+        drop_passenger(floor)
+        e_queue.floor_request_set(floor, direction)
       }
       case _ => {
         e_queue.floor_request_set(floor, required_direction.get)
+        ControllerFactory.elevatorController ! floor_move(floor, required_direction.get)
       }
     }
   }
@@ -77,102 +140,79 @@ class elevator_controller(top_floor:Int) extends Actor {
   def end_floor_request(floor_number:Int, direction:Boolean) = {
     // send e_queue floor number and current direction
     e_queue.floor_request_clear(floor_number, direction)
-  }
-  def openDoors(currentFloor:Int)
-  {
-      location = currentFloor
-      
-      currentFloor match
-      {
-          case 1 =>         SystemStatus.door1Open = true
-          case 2 =>         SystemStatus.door2Open = true
-          case 3 =>         SystemStatus.door3Open = true
-      }
-  }
-   def alarm_On()
-  {
-          //clear request 
-       //   e_queue.clear_All_Request()
-          //check which floor is closest 
-          // stop nearest floor
-          val cableLength = Motor.lineOut()
-          //if between 1 and 2 closer to 1 goto 1
-          if(cableLength > 28)
-          {
-              while (cableLength!=36)
-              {
-                Motor.down() 
-              }                
-              Motor.stop()
-              //open doors
-              openDoors(1)
-                  
-          }
-          //if between 1 and 2 or between 2 and 3 closer to 2 goto 2
-          else if(cableLength < 28 || cableLength < 11)
-          {
-                  
-              if(cableLength >20)
-              {
-                  while (cableLength!=20)
-                  {
-                   	 Motor.up() 
-                  }
-                  Motor.stop()
-                  //open doors
-                  openDoors(2)
-      
-              }
-              else
-              {
-                  while (cableLength!=20)
-                  {
-                          Motor.down() 
-                  }                
-                  Motor.stop()
-                  //open doors
-                  openDoors(3)
-      
-              }        
-          }
-          else
-          {
-              while (cableLength!=2)
-                    {
-                      Motor.up() 
-                    }
-                    Motor.stop()
-                    //open doors
-                    openDoors(3)
-                  
-          }
-           
+    floor_number match {
+    	case 1 => //door1.closeDoor()
+    	case 2 => //door2.closeDoor()
+    	case 3 => //door3.closeDoor()
+    }
   }
 
-  def alarm_Off()
+  def controlOpenDoors(doorNum:Int)
   {
-   //  moveToFloor1()
-  }
-  def moveToFloorOne()
-  {
-      while(Motor.lineOut()!= 32)
-       {
-        //   Motor.douwn()
-       }
-       Motor.stop()
-      // openDoor(1)        
-  }
-  def maintanence_Mode_On()
-  {
-      //not in alarm mode
-      //stop receiving requests
-      //process current queue
-      //move to floor 1
-    //  moveToFloor1()
-  }
-  def maintanence_Mode_Off()
-  {
-      guiGlobals.door1.close()
+    waitingForRequest = true
+		doorNum match{
+			case 1 => door1.open();location = 1;
+			case 2 => door2.open(); location = 2;
+			case 3 => door3.open();location = 3;
+		}
   }
 
+  def controlCloseDoors(doorNum:Int)
+  {
+  	waitingForRequest = false
+    waitingForRequest = true
+		doorNum match{
+			case 1 => door1.closeDoor()
+			case 2 => door2.closeDoor()
+			case 3 => door3.closeDoor()
+		}
+  }
+
+  def breakRequest()
+  {
+		waitingForRequest = false
+  }
+
+  def drop_passenger(floor_number:Int) = {
+    // this is for testing, we'll need to repurpose it elsewhere
+    println("starting drop passenger")
+    //match bsaed on floor number
+    println(floor_number)
+    floor_number match {
+      case 1 => 
+      	//open door 1
+      		controlOpenDoors(1)
+      	//door1.closeDoor()
+      	//dim light on floor 1 
+      	ControllerFactory.btnController.upButtonFloor1.cancelLight()
+      	ControllerFactory.btnController.floor1Button.cancelLight()
+      	controlCloseDoors(2)
+      case 2 => 
+      	//door2.closeDoor()
+      	if (direction) {
+      		ControllerFactory.btnController.upButtonFloor2.cancelLight()
+      	ControllerFactory.btnController.floor2Button.cancelLight()
+      	}
+      	else
+      	{
+					ControllerFactory.btnController.downButtonFloor2.cancelLight()
+					ControllerFactory.btnController.floor2Button.cancelLight()
+      	}
+      	controlOpenDoors(2)
+      	
+      case 3 => 
+      	//open door 3
+      	controlOpenDoors(3)
+      	//dim light on floor 3
+      	ControllerFactory.btnController.downButtonFloor3.cancelLight()
+      	ControllerFactory.btnController.floor3Button.cancelLight()
+      	waitingForRequest = true
+    }
+
+  //  println("open doors")
+  //  guiGlobals.elev_con ! doors_toggle(door, "open")
+   // Thread.sleep(10000)
+   // println("close doors")
+   // guiGlobals.elev_con ! doors_toggle(door, "close")
+  }
 }

@@ -12,7 +12,6 @@ class Button1(var buttonText: String) extends Actor
         }
         def lightUp() =
         {
-                println(buttonText)
                 isLit = true;
                 buttonText match {
                         case "up 1 direction" => SystemStatus.floor1UpButtonLit = true
@@ -29,7 +28,17 @@ class Button1(var buttonText: String) extends Actor
 
         def cancelLight()
         {
-                isLit = false;
+                isLit = true;
+                buttonText match {
+                        case "up 1 direction" => SystemStatus.floor1UpButtonLit = false
+                        case "up 2 direction" => SystemStatus.floor2UpButtonLit = false
+                        case "down 2 direction" => SystemStatus.floor2DownButtonLit = false
+                        case "down 3 direction" => SystemStatus.floor3DownButtonLit = false
+                        case "floor 1 button" => SystemStatus.elevator1ButtonLit = false
+                        case "floor 2 button" => SystemStatus.elevator2ButtonLit = false
+                        case "floor 3 button" => SystemStatus.elevator3ButtonLit = false
+                        case "stop button" => SystemStatus.elevatorStopButtonLit = false
+                }
         }
         
 }

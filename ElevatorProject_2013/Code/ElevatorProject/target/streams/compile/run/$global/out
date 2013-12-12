@@ -2,13 +2,11 @@
 [0m[[0mdebug[0m] [0mStarting sandboxed run...[0m
 [0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
 [0m[[0mdebug[0m] [0m  Classpath:[0m
-[0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\Desktop\ElevatorProjectPartDue\ElevatorProject_2013\Code\ElevatorProject\target\scala-2.9.1\classes[0m
+[0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\Desktop\ElevatorProjectPartDue - Copy\ElevatorProject_2013\Code\ElevatorProject\target\scala-2.9.1\classes[0m
 [0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\.sbt\boot\scala-2.9.1\lib\scala-library.jar[0m
 [0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\.ivy2\cache\org.scala-lang\scala-swing\jars\scala-swing-2.9.1.jar[0m
 [0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\.ivy2\cache\org.scala-tools.time\time_2.9.1\jars\time_2.9.1-0.5.jar[0m
 [0m[[0mdebug[0m] [0m	C:\Users\cnoreikis\.ivy2\cache\joda-time\joda-time\jars\joda-time-1.6.2.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
 [0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread AWT-EventQueue-0 to exit[0m
-[0m[[0mdebug[0m] [0m	Thread AWT-EventQueue-0 exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread Thread-3 to exit[0m
+[0m[[0mdebug[0m] [0mWaiting for thread Thread-2 to exit[0m

@@ -27,37 +27,65 @@ class buttonController
 		while(true){
 			receive{
 				case "up 1 direction" => 
+						var loc = ControllerFactory.elevatorController.location
 						onePassenger.pressButton(upButtonFloor1)
+						ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(1,loc)
 						//elevatorController.processRequests(theElevator)		
 				case "up 2 direction" =>
+						var loc = ControllerFactory.elevatorController.location
 						onePassenger.pressButton(upButtonFloor2)
+						ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(2,loc)
 					//	elevatorController.processRequests(true, theElevator)
 				case "down 3 direction" =>
+						var loc = ControllerFactory.elevatorController.location
 						onePassenger.pressButton(downButtonFloor3)
-						elevatorController ! elevatorController.floor_request(3)
-						println("hi")
+						ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(3,loc)
 				case "down 2 direction" => 
+				    var loc = ControllerFactory.elevatorController.location
 						onePassenger.pressButton(downButtonFloor2)
+						ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(2,loc)
 					//	elevatorController.processRequests(false, theElevator)
-				//case "floor 1 button" => 
-				//		onePassenger.pressButton(floor1Button)
-				//		elevatorController.processRequests()
-			//	case "floor 2 button" =>
-			//			onePassenger.pressButton(floor2Button)
-			//			elevatorController.processRequests()
-			//	case "floor 3 button" =>
-			//			onePassenger.pressButton(floor3Button)
-			//			elevatorController.processRequests()
+				case "floor 1 button" => 
+						if (checkDoorsOpen()){
+								var loc = ControllerFactory.elevatorController.location
+							  onePassenger.pressButton(floor1Button)
+								ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(1,loc)
+						}
+						else{
+							println("No doors open")
+						}
+						
+				case "floor 2 button" =>
+						if (checkDoorsOpen())
+						{
+							  onePassenger.pressButton(floor2Button)
+								var loc = ControllerFactory.elevatorController.location	
+								ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(2,loc)
+						}else {
+							println("No doors open")
+						}
+				case "floor 3 button" =>
+				    
+						if (checkDoorsOpen()){
+							var loc = ControllerFactory.elevatorController.location
+							onePassenger.pressButton(floor3Button)
+							ControllerFactory.elevatorController ! ControllerFactory.elevatorController.floor_request(3,loc)
+						}
+						else {
+							println("No doors open")
+						}
+						
 			//	case "stop button" => 
 			//			onePassenger.pressButton(stopButton)
 			//			elevatorController.processRequests()
 			}
 	}
 	}
-	def upDownPressed(flooorNumber: Int)
-	{
-		
-	}
-	
 
+	def checkDoorsOpen():Boolean = {
+		if (ControllerFactory.elevatorController.door1.isOpen || ControllerFactory.elevatorController.door2.isOpen
+		|| ControllerFactory.elevatorController.door3.isOpen) return true
+		return false
 	}
+ }
+	
